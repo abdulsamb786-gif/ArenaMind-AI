@@ -1,6 +1,7 @@
 import { useEffect, useRef } from 'react';
 import { io } from 'socket.io-client';
 import useStore from '../store/appStore';
+import mockData from '../services/mockData';
 
 export default function useSocket() {
   const socketRef = useRef(null);
@@ -15,17 +16,33 @@ export default function useSocket() {
       reconnectionDelayMax: 5000,
     });
 
+    let mockTimer;
+
     socket.on('stadium:update', (data) => {
       setStadium(data);
     });
 
-    socket.on('connect_error', (err) => {
-      console.error('Socket connection error:', err.message);
+    socket.on('connect_error', () => {
+      if (!mockTimer) {
+        setStadium(mockData.stadiumUpdate);
+        mockTimer = setInterval(() => {
+          setStadium({ ...mockData.stadiumUpdate, crowd: { ...mockData.stadiumUpdate.crowd, totalOccupancy: 70 + Math.floor(Math.random() * 10) } });
+        }, 5000);
+      }
     });
 
-    socket.on('error', (err) => {
-      console.error('Socket error:', err.message);
-    });
+    socket.on('error', () => {});
+
+    setTimeout(() => {
+      if (!socket.connected) {
+        setStadium(mockData.stadiumUpdate);
+        if (!mockTimer) {
+          mockTimer = setInterval(() => {
+            setStadium({ ...mockData.stadiumUpdate, crowd: { ...mockData.stadiumUpdate.crowd, totalOccupancy: 70 + Math.floor(Math.random() * 10) } });
+          }, 5000);
+        }
+      }
+    }, 2000);
 
     socketRef.current = socket;
 
@@ -34,6 +51,7 @@ export default function useSocket() {
       socket.off('connect_error');
       socket.off('error');
       socket.disconnect();
+      if (mockTimer) clearInterval(mockTimer);
     };
   }, [setStadium]);
 

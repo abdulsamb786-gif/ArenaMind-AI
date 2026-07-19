@@ -1,12 +1,43 @@
 const BASE = '/api';
+import mockData from './mockData';
+
+const MOCK_ROUTES = {
+  '/agents': () => ({ agents: mockData.agents, online: 6 }),
+  '/kpi': () => mockData.kpi,
+  '/mission-control/status': () => ({ status: 'operational', mode: 'demo' }),
+  '/mission-control/dashboard': () => mockData.dashboard,
+  '/mission-control/crowd': () => mockData.dashboard.crowd,
+  '/mission-control/transport': () => ({ transport: mockData.dashboard.transport, parking: mockData.dashboard.parking }),
+  '/mission-control/weather': () => mockData.dashboard.weather,
+  '/mission-control/incidents': () => ({ incidents: mockData.dashboard.securityIncidents }),
+  '/mission-control/ai-insight': () => ({ insight: mockData.aiInsight }),
+  '/mission-control/mission': () => ({ mission: mockData.mission }),
+  '/mission-control/execute': () => ({ success: true }),
+  '/copilot/chat': () => mockData.copilot,
+  '/copilot/translate': () => mockData.translate,
+  '/incident/report': () => mockData.incident,
+  '/incident/resolve': () => ({ success: true }),
+  '/demo/scenarios': () => mockData.demoScenarios,
+  '/demo/run/': () => mockData.demoRun,
+  '/demo/simulate': () => mockData.simulateRun,
+  '/briefing': () => mockData.briefing,
+  '/health': () => ({ status: 'ok', mode: 'demo' }),
+};
 
 async function request(url, options = {}) {
-  const res = await fetch(`${BASE}${url}`, {
-    headers: { 'Content-Type': 'application/json', ...options.headers },
-    ...options,
-  });
-  if (!res.ok) throw new Error(`API Error: ${res.status}`);
-  return res.json();
+  try {
+    const res = await fetch(`${BASE}${url}`, {
+      headers: { 'Content-Type': 'application/json', ...options.headers },
+      ...options,
+    });
+    if (!res.ok) throw new Error(`API Error: ${res.status}`);
+    return res.json();
+  } catch {
+    for (const [route, handler] of Object.entries(MOCK_ROUTES)) {
+      if (url.startsWith(route)) return handler();
+    }
+    return { success: false, error: 'No mock data for this endpoint' };
+  }
 }
 
 export const api = {
