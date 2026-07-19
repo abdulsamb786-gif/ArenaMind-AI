@@ -7,6 +7,9 @@
     "server": "node server/src/index.js",
     "client": "cd client && npm run dev",
     "dev": "concurrently \"npm run server\" \"npm run client\"",
-    "install:all": "cd server && npm install && cd ../client && npm install"
+    "install:all": "cd server && npm install && cd ../client && npm install",
+    "build": "cd client && npm run build",
+    "start": "NODE_ENV=production node server/src/index.js",
+    "deploy": "npm run install:all && npm run build && npm run start"
   }
 }
