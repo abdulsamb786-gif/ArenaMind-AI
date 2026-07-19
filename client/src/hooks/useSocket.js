@@ -26,20 +26,18 @@ export default function useSocket() {
     const startMockTimer = () => {
       setStadium(mockData.stadiumUpdate);
       mockTimer = setInterval(() => {
-        setStadium((prev) => {
-          const base = mockData.stadiumUpdate;
-          return {
-            ...base,
-            overallOccupancy: 65 + Math.floor(Math.random() * 25),
-            gates: base.gates.map((g) => ({
-              ...g,
-              occupancy: Math.min(100, Math.max(20, g.occupancy + Math.floor(Math.random() * 12 - 6))),
-            })),
-            foodCourts: base.foodCourts.map((f) => ({
-              ...f,
-              queueTime: Math.max(1, Math.min(20, f.queueTime + Math.floor(Math.random() * 5 - 2))),
-            })),
-          };
+        const base = mockData.stadiumUpdate;
+        setStadium({
+          ...base,
+          overallOccupancy: 65 + Math.floor(Math.random() * 25),
+          gates: base.gates.map((g) => ({
+            ...g,
+            occupancy: Math.min(100, Math.max(20, g.occupancy + Math.floor(Math.random() * 12 - 6))),
+          })),
+          foodCourts: base.foodCourts.map((f) => ({
+            ...f,
+            queueTime: Math.max(1, Math.min(20, f.queueTime + Math.floor(Math.random() * 5 - 2))),
+          })),
         });
       }, 5000);
     };
