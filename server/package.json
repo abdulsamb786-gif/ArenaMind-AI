@@ -1,0 +1,17 @@
+{
+  "name": "arena-mind-ai-server",
+  "version": "1.0.0",
+  "type": "module",
+  "scripts": {
+    "start": "node src/index.js",
+    "dev": "node --watch src/index.js"
+  },
+  "dependencies": {
+    "express": "^4.18.2",
+    "cors": "^2.8.5",
+    "socket.io": "^4.7.4",
+    "dotenv": "^16.4.1",
+    "@google/generative-ai": "^0.21.0",
+    "uuid": "^9.0.0"
+  }
+}

@@ -1,0 +1,12 @@
+{
+  "name": "arena-mind-ai",
+  "version": "1.0.0",
+  "private": true,
+  "description": "ArenaMind AI - AI Mission Control for FIFA World Cup 2026",
+  "scripts": {
+    "server": "node server/src/index.js",
+    "client": "cd client && npm run dev",
+    "dev": "concurrently \"npm run server\" \"npm run client\"",
+    "install:all": "cd server && npm install && cd ../client && npm install"
+  }
+}
