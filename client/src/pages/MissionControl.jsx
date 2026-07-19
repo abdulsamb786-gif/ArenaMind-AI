@@ -1,6 +1,6 @@
 import { useEffect, useState, useCallback } from 'react';
 import { motion } from 'framer-motion';
-import { AlertTriangle, Brain, ArrowLeft, Target, Activity } from 'lucide-react';
+import { AlertTriangle, Brain, ArrowLeft, Target, Activity, CheckCircle2 } from 'lucide-react';
 import { useNavigate } from 'react-router-dom';
 import GlassCard from '../components/Common/GlassCard';
 import KPIBar from '../components/Dashboard/KPIBar';
@@ -47,9 +47,12 @@ export default function MissionControl() {
     }
   }, [missionAlert, addTimeline]);
 
+  const [executed, setExecuted] = useState(false);
+
   const handleExecute = useCallback(async () => {
     if (recommendation?.recommendation) {
       await api.stadium.execute(recommendation.recommendation);
+      setExecuted(true);
       addTimeline({ event: 'Plan executed successfully', time: 'now' });
     }
   }, [recommendation, addTimeline]);
@@ -227,7 +230,23 @@ export default function MissionControl() {
                       ))}
                     </div>
                   )}
-                  <ActionBtn onClick={handleExecute} />
+                  {executed ? (
+                    <div className="space-y-3">
+                      <div className="glass-card !p-4 border-arena-green/30 bg-arena-green/5 text-center">
+                        <CheckCircle2 size={32} className="mx-auto mb-2 text-arena-green" />
+                        <p className="text-lg font-bold text-arena-green">Mission Executed ✓</p>
+                        <p className="text-xs text-arena-muted mt-1">All tasks have been dispatched. Agents are monitoring the situation.</p>
+                      </div>
+                      <button
+                        onClick={() => { setRecommendation(null); setExecuted(false); }}
+                        className="btn-primary w-full"
+                      >
+                        Create New Mission
+                      </button>
+                    </div>
+                  ) : (
+                    <ActionBtn onClick={handleExecute} />
+                  )}
                 </div>
               ) : (
                 <div className="text-center py-8 text-arena-muted text-sm">
