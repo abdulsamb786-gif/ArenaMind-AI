@@ -71,18 +71,23 @@ const mockData = {
     mission_type: 'crowd_control',
     priority: 'high',
     status: 'active',
-    recommendation: {
-      tasks: [
-        { action: 'Dispatch 4 stewards to Gate F', assignee: 'Security Lead' },
-        { action: 'Open auxiliary exit Gate F2', assignee: 'Operations' },
-        { action: 'Broadcast crowd redistribution announcement', assignee: 'Announcement System' },
-      ],
-      resources: { volunteers: 4, eta_minutes: 3 },
-    },
+    impact_description: 'Gate F occupancy at 91% — hazardous crowding risk within 10 minutes if no action taken',
+    recommendation: 'Dispatch 4 stewards to Gate F, open auxiliary exit, and broadcast crowd redistribution announcement',
+    tasks: [
+      { action: 'Dispatch 4 stewards to Gate F', assignee: 'Security Lead', assignee_type: 'Security Lead' },
+      { action: 'Open auxiliary exit Gate F2', assignee: 'Operations', assignee_type: 'Operations' },
+      { action: 'Broadcast crowd redistribution announcement', assignee: 'Announcement System', assignee_type: 'Announcement System' },
+    ],
+    resources: { volunteers: 4, eta_minutes: 3 },
     impact: 'High',
     risk_level: 'critical',
     eta_minutes: 3,
     confidence: 87,
+    safety_instructions: [
+      'Gate F occupancy at 91% with match starting in 15 minutes',
+      'Historical congestion pattern matches',
+      'Weather is clear, no external delays',
+    ],
     explanation: {
       primaryReason: 'Gate F occupancy at 91% with match starting in 15 minutes',
       supportingFactors: [
@@ -93,6 +98,11 @@ const mockData = {
       whatIfNot: 'Without intervention, Gate F may reach 100% capacity within 10 minutes causing hazardous crowding',
     },
     announcement: 'Attention fans. Gate F is experiencing high traffic. Please use Gates E and D for entry. Additional staff has been deployed to assist.',
+    announcement_text: 'Attention fans. Gate F is experiencing high traffic. Please use Gates E and D for entry. Additional staff has been deployed to assist.',
+    volunteer_count_needed: 4,
+    volunteerCount: 4,
+    medical_units_needed: 1,
+    security_units_needed: 2,
   },
 
   copilot: {
