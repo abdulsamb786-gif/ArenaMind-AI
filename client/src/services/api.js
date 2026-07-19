@@ -2,29 +2,6 @@ import mockData from './mockData';
 
 const BASE = import.meta.env.VITE_API_URL ? `${import.meta.env.VITE_API_URL}/api` : '/api';
 
-const MOCK_ROUTES = {
-  '/agents': () => ({ agents: mockData.agents, online: 6 }),
-  '/kpi': () => mockData.kpi,
-  '/mission-control/status': () => ({ status: 'operational', mode: 'demo' }),
-  '/mission-control/dashboard': () => mockData.dashboard,
-  '/mission-control/crowd': () => mockData.dashboard.crowd,
-  '/mission-control/transport': () => ({ transport: mockData.dashboard.transport, parking: mockData.dashboard.parking }),
-  '/mission-control/weather': () => mockData.dashboard.weather,
-  '/mission-control/incidents': () => ({ incidents: mockData.dashboard.securityIncidents }),
-  '/mission-control/ai-insight': () => ({ insight: mockData.aiInsight }),
-  '/mission-control/mission': () => ({ mission: mockData.mission }),
-  '/mission-control/execute': () => ({ success: true }),
-  '/copilot/chat': () => mockData.copilot,
-  '/copilot/translate': () => mockData.translate,
-  '/incident/report': () => mockData.incident,
-  '/incident/resolve': () => ({ success: true }),
-  '/demo/scenarios': () => mockData.demoScenarios,
-  '/demo/run/': () => mockData.demoRun,
-  '/demo/simulate': () => mockData.simulateRun,
-  '/briefing': () => mockData.briefing,
-  '/health': () => ({ status: 'ok', mode: 'demo' }),
-};
-
 async function request(url, options = {}) {
   try {
     const res = await fetch(`${BASE}${url}`, {
@@ -34,11 +11,53 @@ async function request(url, options = {}) {
     if (!res.ok) throw new Error(`API Error: ${res.status}`);
     return res.json();
   } catch {
-    for (const [route, handler] of Object.entries(MOCK_ROUTES)) {
-      if (url.startsWith(route)) return handler();
-    }
-    return { success: false, error: 'No mock data for this endpoint' };
+    return getMockFallback(url, options);
   }
+}
+
+function getMockFallback(url, options) {
+  if (url.startsWith('/demo/run/')) {
+    const scenarioId = url.replace('/demo/run/', '').split('/')[0];
+    return mockData.demoRuns[scenarioId] || mockData.demoRuns['lost-child'];
+  }
+
+  if (url.startsWith('/demo/simulate')) {
+    let body;
+    try { body = JSON.parse(options.body); } catch { body = {}; }
+    const typeMap = {
+      'close-gate-a': 'close-gate-a',
+      'heavy-rain': 'heavy-rain',
+      'crowd-surge': 'crowd-surge',
+    };
+    const simId = typeMap[body.scenarioType] || 'close-gate-a';
+    return mockData.simulateRuns[simId];
+  }
+
+  const MOCK_ROUTES = {
+    '/agents': () => ({ agents: mockData.agents, online: 6 }),
+    '/kpi': () => mockData.kpi,
+    '/mission-control/status': () => ({ status: 'operational', mode: 'demo' }),
+    '/mission-control/dashboard': () => mockData.dashboard,
+    '/mission-control/crowd': () => mockData.dashboard.crowd,
+    '/mission-control/transport': () => ({ transport: mockData.dashboard.transport, parking: mockData.dashboard.parking }),
+    '/mission-control/weather': () => mockData.dashboard.weather,
+    '/mission-control/incidents': () => ({ incidents: mockData.dashboard.securityIncidents }),
+    '/mission-control/ai-insight': () => ({ insight: mockData.aiInsight }),
+    '/mission-control/mission': () => ({ mission: mockData.mission }),
+    '/mission-control/execute': () => ({ success: true }),
+    '/copilot/chat': () => mockData.copilot,
+    '/copilot/translate': () => mockData.translate,
+    '/incident/report': () => mockData.incident,
+    '/incident/resolve': () => ({ success: true }),
+    '/demo/scenarios': () => mockData.demoScenarios,
+    '/briefing': () => mockData.briefing,
+    '/health': () => ({ status: 'ok', mode: 'demo' }),
+  };
+
+  for (const [route, handler] of Object.entries(MOCK_ROUTES)) {
+    if (url.startsWith(route)) return handler();
+  }
+  return { success: false, error: 'No mock data for this endpoint' };
 }
 
 export const api = {

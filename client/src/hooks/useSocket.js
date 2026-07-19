@@ -23,26 +23,35 @@ export default function useSocket() {
       setStadium(data);
     });
 
+    const startMockTimer = () => {
+      setStadium(mockData.stadiumUpdate);
+      mockTimer = setInterval(() => {
+        setStadium((prev) => {
+          const base = mockData.stadiumUpdate;
+          return {
+            ...base,
+            overallOccupancy: 65 + Math.floor(Math.random() * 25),
+            gates: base.gates.map((g) => ({
+              ...g,
+              occupancy: Math.min(100, Math.max(20, g.occupancy + Math.floor(Math.random() * 12 - 6))),
+            })),
+            foodCourts: base.foodCourts.map((f) => ({
+              ...f,
+              queueTime: Math.max(1, Math.min(20, f.queueTime + Math.floor(Math.random() * 5 - 2))),
+            })),
+          };
+        });
+      }, 5000);
+    };
+
     socket.on('connect_error', () => {
-      if (!mockTimer) {
-        setStadium(mockData.stadiumUpdate);
-        mockTimer = setInterval(() => {
-          setStadium({ ...mockData.stadiumUpdate, overallOccupancy: 70 + Math.floor(Math.random() * 10) });
-        }, 5000);
-      }
+      if (!mockTimer) startMockTimer();
     });
 
     socket.on('error', () => {});
 
     setTimeout(() => {
-      if (!socket.connected) {
-        setStadium(mockData.stadiumUpdate);
-        if (!mockTimer) {
-          mockTimer = setInterval(() => {
-            setStadium({ ...mockData.stadiumUpdate, overallOccupancy: 70 + Math.floor(Math.random() * 10) });
-          }, 5000);
-        }
-      }
+      if (!socket.connected && !mockTimer) startMockTimer();
     }, 2000);
 
     socketRef.current = socket;
