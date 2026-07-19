@@ -1,5 +1,6 @@
-const BASE = '/api';
 import mockData from './mockData';
+
+const BASE = import.meta.env.VITE_API_URL ? `${import.meta.env.VITE_API_URL}/api` : '/api';
 
 const MOCK_ROUTES = {
   '/agents': () => ({ agents: mockData.agents, online: 6 }),

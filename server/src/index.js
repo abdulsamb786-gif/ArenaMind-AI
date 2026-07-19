@@ -25,10 +25,13 @@ const CLIENT_URL = process.env.CLIENT_URL || "http://localhost:5173";
 const isProduction = process.env.NODE_ENV === "production";
 
 const io = new Server(httpServer, {
-  cors: { origin: CLIENT_URL, methods: ["GET", "POST"] },
+  cors: {
+    origin: isProduction ? "*" : CLIENT_URL,
+    methods: ["GET", "POST"],
+  },
 });
 
-app.use(cors({ origin: CLIENT_URL }));
+app.use(cors({ origin: isProduction ? "*" : CLIENT_URL }));
 app.use(express.json());
 
 app.use("/api/copilot", copilotRoutes);
