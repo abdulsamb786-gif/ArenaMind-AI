@@ -26,7 +26,7 @@ export default function useSocket() {
       if (!mockTimer) {
         setStadium(mockData.stadiumUpdate);
         mockTimer = setInterval(() => {
-          setStadium({ ...mockData.stadiumUpdate, crowd: { ...mockData.stadiumUpdate.crowd, totalOccupancy: 70 + Math.floor(Math.random() * 10) } });
+          setStadium({ ...mockData.stadiumUpdate, overallOccupancy: 70 + Math.floor(Math.random() * 10) });
         }, 5000);
       }
     });
@@ -38,7 +38,7 @@ export default function useSocket() {
         setStadium(mockData.stadiumUpdate);
         if (!mockTimer) {
           mockTimer = setInterval(() => {
-            setStadium({ ...mockData.stadiumUpdate, crowd: { ...mockData.stadiumUpdate.crowd, totalOccupancy: 70 + Math.floor(Math.random() * 10) } });
+            setStadium({ ...mockData.stadiumUpdate, overallOccupancy: 70 + Math.floor(Math.random() * 10) });
           }, 5000);
         }
       }

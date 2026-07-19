@@ -120,9 +120,9 @@ export default function MissionControl() {
               </div>
             </div>
             <div className="space-y-4">
-              <WeatherCard data={stadium ? { condition: 'clear', temperature: 26, humidity: 55, windSpeed: 12, rainProbability: 20 } : {}} />
+              <WeatherCard data={stadium?.weather || { condition: 'clear', temperature: 26, humidity: 55, windSpeed: 12, rainProbability: 20 }} />
               <TransportCard parking={stadium?.parkingLots || []} transport={stadium?.transportHubs || []} />
-              <SecurityCard incidents={[]} />
+              <SecurityCard incidents={stadium?.securityIncidents || []} />
             </div>
           </div>
         )}

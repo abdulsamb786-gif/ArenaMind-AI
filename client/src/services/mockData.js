@@ -219,13 +219,41 @@ const mockData = {
   },
 
   stadiumUpdate: {
-    crowd: { totalOccupancy: 72, gates: [{ name: 'Gate A', occupancy: 85 }, { name: 'Gate B', occupancy: 62 }, { name: 'Gate C', occupancy: 45 }, { name: 'Gate D', occupancy: 78 }, { name: 'Gate E', occupancy: 34 }, { name: 'Gate F', occupancy: 91 }] },
-    foodCourts: [{ name: 'Pizza Stand', queueTime: 8 }, { name: 'Burger Point', queueTime: 12 }, { name: 'Taco Bell', queueTime: 5 }, { name: 'Coffee Cart', queueTime: 3 }, { name: 'Ice Cream', queueTime: 2 }],
-    medicalPosts: [{ zone: 'North Stand', status: 'available' }, { zone: 'South Stand', status: 'available' }, { zone: 'East Stand', status: 'busy' }, { zone: 'West Stand', status: 'available' }],
-    securityIncidents: [{ summary: 'Suspicious bag near Gate C', severity: 'high' }, { summary: 'Minor altercation Section 204', severity: 'low' }],
+    gates: [
+      { name: 'Gate A', occupancy: 85, riskLevel: 'elevated' },
+      { name: 'Gate B', occupancy: 62, riskLevel: 'normal' },
+      { name: 'Gate C', occupancy: 45, riskLevel: 'normal' },
+      { name: 'Gate D', occupancy: 78, riskLevel: 'elevated' },
+      { name: 'Gate E', occupancy: 34, riskLevel: 'low' },
+      { name: 'Gate F', occupancy: 91, riskLevel: 'critical' },
+    ],
+    overallOccupancy: 72,
+    foodCourts: [
+      { name: 'Pizza Stand', queueTime: 8 },
+      { name: 'Burger Point', queueTime: 12 },
+      { name: 'Taco Bell', queueTime: 5 },
+      { name: 'Coffee Cart', queueTime: 3 },
+      { name: 'Ice Cream', queueTime: 2 },
+    ],
+    medicalPosts: [
+      { zone: 'North Stand', status: 'available' },
+      { zone: 'South Stand', status: 'available' },
+      { zone: 'East Stand', status: 'busy' },
+      { zone: 'West Stand', status: 'available' },
+    ],
+    securityIncidents: [
+      { summary: 'Suspicious bag near Gate C', severity: 'high' },
+      { summary: 'Minor altercation Section 204', severity: 'low' },
+    ],
     weather: { condition: 'clear', temperature: 28, humidity: 45, windSpeed: 12, rainProbability: 10 },
-    transport: [{ name: 'Metro Line 1', status: 'busy', queueMinutes: 15 }, { name: 'Shuttle Bus', status: 'normal', queueMinutes: 8 }],
-    parking: [{ name: 'Parking A', status: 'full', current: 500, capacity: 500 }, { name: 'Parking B', status: 'busy', current: 380, capacity: 500 }],
+    transportHubs: [
+      { name: 'Metro Line 1', status: 'busy', queueMinutes: 15 },
+      { name: 'Shuttle Bus', status: 'normal', queueMinutes: 8 },
+    ],
+    parkingLots: [
+      { name: 'Parking A', status: 'full', current: 500, capacity: 500 },
+      { name: 'Parking B', status: 'busy', current: 380, capacity: 500 },
+    ],
   },
 };
 
